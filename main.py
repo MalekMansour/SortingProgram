@@ -253,14 +253,28 @@ input_text_box.pack(fill="both", expand=True)
 # Controls
 controls_frame = tk.Frame(root, padx=10, pady=10)
 controls_frame.grid(row=0, column=1, sticky="nsew")
+
+# Dropdown to select sorting method
 sort_method_combo = ttk.Combobox(controls_frame, state="readonly", values=[
-    "Bubble Sort", "Swap Sort", "Shell Sort", "Selection Sort", "Insertion Sort"])
+    "Bubble Sort", "Swap Sort", "Shell Sort", "Selection Sort", "Insertion Sort",
+    "Merge Sort", "Quick Sort", "Heap Sort", "Radix Sort", "Inverse Sort"])
 sort_method_combo.set("Bubble Sort")
 sort_method_combo.pack(fill="x", pady=5)
+
+# Sort button
 sort_button = tk.Button(controls_frame, text="Sort", command=sort_numbers)
 sort_button.pack(fill="x", pady=5)
+
+# Clear All button
 clear_button = tk.Button(controls_frame, text="Clear All", command=clear_all)
 clear_button.pack(fill="x", pady=5)
+
+# Clear All function
+def clear_all():
+    input_text_box.delete("1.0", tk.END)
+    output_text_box.delete("1.0", tk.END)
+    explanation_text_box.delete("1.0", tk.END)
+    sort_method_combo.set("Bubble Sort")  # Reset to default sort method
 
 # Explanation Box
 explanation_frame = tk.Frame(controls_frame, padx=10, pady=10)
