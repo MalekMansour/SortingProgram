@@ -1,14 +1,46 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk
+from tkinter import messagebox
 
 # Sorting Algorithms
+def bubble_sort(numbers):
+    n = len(numbers)
+    for i in range(n):
+        for j in range(0, n-i-1):
+            if numbers[j] > numbers[j+1]:
+                numbers[j], numbers[j+1] = numbers[j+1], numbers[j]
+    return numbers
+
+def swap_sort(numbers):
+    n = len(numbers)
+    for i in range(n):
+        while 1 <= numbers[i] <= n and numbers[numbers[i] - 1] != numbers[i]:
+            correct_index = numbers[i] - 1
+            numbers[correct_index], numbers[i] = numbers[i], numbers[correct_index]
+    return numbers
+
+def shell_sort(numbers):
+    n = len(numbers)
+    gap = n // 2
+    while gap > 0:
+        for i in range(gap, n):
+            temp = numbers[i]
+            j = i
+            while j >= gap and numbers[j - gap] > temp:
+                numbers[j] = numbers[j - gap]
+                j -= gap
+            numbers[j] = temp
+        gap //= 2
+    return numbers
+
 def selection_sort(numbers):
-    for i in range(len(numbers)):
-        min_index = i
-        for j in range(i + 1, len(numbers)):
-            if numbers[j] < numbers[min_index]:
-                min_index = j
-        numbers[i], numbers[min_index] = numbers[min_index], numbers[i]
+    n = len(numbers)
+    for i in range(n):
+        min_idx = i
+        for j in range(i+1, n):
+            if numbers[j] < numbers[min_idx]:
+                min_idx = j
+        numbers[i], numbers[min_idx] = numbers[min_idx], numbers[i]
     return numbers
 
 def insertion_sort(numbers):
@@ -21,40 +53,33 @@ def insertion_sort(numbers):
         numbers[j + 1] = key
     return numbers
 
-def bubble_sort(numbers):
-    n = len(numbers)
-    for i in range(n):
-        for j in range(0, n-i-1):
-            if numbers[j] > numbers[j+1]:
-                numbers[j], numbers[j+1] = numbers[j+1], numbers[j]
-    return numbers
-
 def merge_sort(numbers):
     if len(numbers) > 1:
         mid = len(numbers) // 2
-        left_half = numbers[:mid]
-        right_half = numbers[mid:]
+        L = numbers[:mid]
+        R = numbers[mid:]
 
-        merge_sort(left_half)
-        merge_sort(right_half)
+        merge_sort(L)
+        merge_sort(R)
 
         i = j = k = 0
-        while i < len(left_half) and j < len(right_half):
-            if left_half[i] < right_half[j]:
-                numbers[k] = left_half[i]
+
+        while i < len(L) and j < len(R):
+            if L[i] < R[j]:
+                numbers[k] = L[i]
                 i += 1
             else:
-                numbers[k] = right_half[j]
+                numbers[k] = R[j]
                 j += 1
             k += 1
 
-        while i < len(left_half):
-            numbers[k] = left_half[i]
+        while i < len(L):
+            numbers[k] = L[i]
             i += 1
             k += 1
 
-        while j < len(right_half):
-            numbers[k] = right_half[j]
+        while j < len(R):
+            numbers[k] = R[j]
             j += 1
             k += 1
     return numbers
@@ -62,76 +87,11 @@ def merge_sort(numbers):
 def quick_sort(numbers):
     if len(numbers) <= 1:
         return numbers
-    else:
-        pivot = numbers[0]
-        less_than_pivot = [x for x in numbers[1:] if x <= pivot]
-        greater_than_pivot = [x for x in numbers[1:] if x > pivot]
-        return quick_sort(less_than_pivot) + [pivot] + quick_sort(greater_than_pivot)
-
-def heapify(arr, n, i):
-    largest = i
-    left = 2 * i + 1
-    right = 2 * i + 2
-
-    if left < n and arr[i] < arr[left]:
-        largest = left
-    if right < n and arr[largest] < arr[right]:
-        largest = right
-    if largest != i:
-        arr[i], arr[largest] = arr[largest], arr[i]
-        heapify(arr, n, largest)
-
-def heap_sort(numbers):
-    n = len(numbers)
-    for i in range(n // 2 - 1, -1, -1):
-        heapify(numbers, n, i)
-    for i in range(n-1, 0, -1):
-        numbers[i], numbers[0] = numbers[0], numbers[i]
-        heapify(numbers, i, 0)
-    return numbers
-
-def shell_sort(numbers):
-    gap = len(numbers) // 2
-    while gap > 0:
-        for i in range(gap, len(numbers)):
-            temp = numbers[i]
-            j = i
-            while j >= gap and numbers[j - gap] > temp:
-                numbers[j] = numbers[j - gap]
-                j -= gap
-            numbers[j] = temp
-        gap //= 2
-    return numbers
-
-def swap_sort(numbers):
-    n = len(numbers)
-    for i in range(n):
-        while 1 <= numbers[i] <= n and numbers[numbers[i] - 1] != numbers[i]:
-            correct_index = numbers[i] - 1
-            numbers[correct_index], numbers[i] = numbers[i], numbers[correct_index]
-    return numbers
-
-def counting_sort(numbers, exp):
-    n = len(numbers)
-    output = [0] * n
-    count = [0] * 10
-
-    for i in numbers:
-        index = i // exp
-        count[index % 10] += 1
-
-    for i in range(1, 10):
-        count[i] += count[i - 1]
-
-    i = n - 1
-    while i >= 0:
-        index = numbers[i] // exp
-        output[count[index % 10] - 1] = numbers[i]
-        count[index % 10] -= 1
-        i -= 1
-
-    for i in range(n):
-        numbers[i] = output[i]
+    pivot = numbers[len(numbers) // 2]
+    left = [x for x in numbers if x < pivot]
+    middle = [x for x in numbers if x == pivot]
+    right = [x for x in numbers if x > pivot]
+    return quick_sort(left) + middle + quick_sort(right)
 
 def radix_sort(numbers):
     max_val = max(numbers)
@@ -141,82 +101,98 @@ def radix_sort(numbers):
         exp *= 10
     return numbers
 
+def counting_sort(numbers, exp):
+    n = len(numbers)
+    output = [0] * n
+    count = [0] * 10
+    for i in range(n):
+        index = numbers[i] // exp
+        count[index % 10] += 1
+    for i in range(1, 10):
+        count[i] += count[i - 1]
+    i = n - 1
+    while i >= 0:
+        index = numbers[i] // exp
+        output[count[index % 10] - 1] = numbers[i]
+        count[index % 10] -= 1
+        i -= 1
+    for i in range(n):
+        numbers[i] = output[i]
+
+def inverse_sort(numbers):
+    return sorted(numbers, reverse=True)
+
 # Main Sorting Function
 def sort_numbers():
     try:
-        numbers = list(map(int, entry.get().split(',')))
-        algorithm = algo_combobox.get()
-        if not algorithm:
-            messagebox.showwarning("Warning", "Please select a sorting algorithm.")
-            return
+        input_text = input_text_box.get("1.0", tk.END).strip()
+        numbers = list(map(int, input_text.split(",")))
+        sort_method = sort_method_combo.get()
 
-        if algorithm == "Selection Sort":
-            result = selection_sort(numbers)
-        elif algorithm == "Insertion Sort":
-            result = insertion_sort(numbers)
-        elif algorithm == "Bubble Sort":
+        if sort_method == "Bubble Sort":
             result = bubble_sort(numbers)
-        elif algorithm == "Merge Sort":
-            result = merge_sort(numbers)
-        elif algorithm == "Quick Sort":
-            result = quick_sort(numbers)
-        elif algorithm == "Heap Sort":
-            result = heap_sort(numbers)
-        elif algorithm == "Shell Sort":
-            result = shell_sort(numbers)
-        elif algorithm == "Swap Sort":
+        elif sort_method == "Swap Sort":
             result = swap_sort(numbers)
-        elif algorithm == "Radix Sort":
+        elif sort_method == "Shell Sort":
+            result = shell_sort(numbers)
+        elif sort_method == "Selection Sort":
+            result = selection_sort(numbers)
+        elif sort_method == "Insertion Sort":
+            result = insertion_sort(numbers)
+        elif sort_method == "Merge Sort":
+            result = merge_sort(numbers)
+        elif sort_method == "Quick Sort":
+            result = quick_sort(numbers)
+        elif sort_method == "Radix Sort":
             result = radix_sort(numbers)
-        elif algorithm == "Inverse Sort":
-            result = selection_sort(numbers)[::-1]
+        elif sort_method == "Inverse Sort":
+            result = inverse_sort(numbers)
         else:
-            messagebox.showerror("Error", "Invalid algorithm selected.")
-            return
+            raise ValueError("Invalid sorting method selected.")
 
-        result_str = ', '.join(map(str, result))
-        result_label.config(text="Sorted Numbers: " + result_str)
-        result_label.result = result_str
-    except ValueError:
-        messagebox.showerror("Error", "Please enter valid integers separated by commas.")
+        output_text_box.delete("1.0", tk.END)
+        output_text_box.insert(tk.END, ", ".join(map(str, result)))
+    except Exception as e:
+        messagebox.showerror("Error", f"An error occurred: {e}")
 
-def copy_to_clipboard():
-    if hasattr(result_label, 'result'):
-        root.clipboard_clear()
-        root.clipboard_append(result_label.result)
-        root.update()
-        messagebox.showinfo("Copied", "Sorted numbers copied to clipboard!")
-    else:
-        messagebox.showwarning("Warning", "No sorted result to copy.")
+# Clear All Function
+def clear_all():
+    input_text_box.delete("1.0", tk.END)
+    output_text_box.delete("1.0", tk.END)
 
-# GUI Setup
+# Create Tkinter Window
 root = tk.Tk()
-root.title("Sorting Algorithm Visualizer")
-root.geometry("500x400")
+root.title("Sorting Program")
 
-# Input Entry
-tk.Label(root, text="Enter numbers (comma-separated):").pack(pady=5)
-entry = tk.Entry(root, width=50)
-entry.pack(pady=5)
+# Layout Configuration
+root.rowconfigure(0, weight=1)
+root.columnconfigure([0, 1, 2], weight=1, uniform="column")
 
-# Algorithm Selection
-tk.Label(root, text="Select a sorting algorithm:").pack(pady=5)
-algo_combobox = ttk.Combobox(root, values=[
-    "Selection Sort", "Insertion Sort", "Bubble Sort", "Merge Sort", "Quick Sort",
-    "Heap Sort", "Shell Sort", "Swap Sort", "Radix Sort", "Inverse Sort"
-], state="readonly")
-algo_combobox.pack(pady=5)
+# Input Text Area
+input_frame = tk.Frame(root, padx=10, pady=10)
+input_frame.grid(row=0, column=0, sticky="nsew")
+tk.Label(input_frame, text="Input Numbers (comma-separated):", anchor="w").pack(fill="x")
+input_text_box = tk.Text(input_frame, height=20, width=40)
+input_text_box.pack(fill="both", expand=True)
 
-# Sort Button
-sort_button = tk.Button(root, text="Sort", command=sort_numbers)
-sort_button.pack(pady=10)
+# Controls
+controls_frame = tk.Frame(root, padx=10, pady=10)
+controls_frame.grid(row=0, column=1, sticky="nsew")
+sort_method_combo = ttk.Combobox(controls_frame, state="readonly", values=[
+    "Bubble Sort", "Swap Sort", "Shell Sort", "Selection Sort", 
+    "Insertion Sort", "Merge Sort", "Quick Sort", "Radix Sort", "Inverse Sort"])
+sort_method_combo.set("Bubble Sort")
+sort_method_combo.pack(fill="x", pady=5)
+sort_button = tk.Button(controls_frame, text="Sort", command=sort_numbers)
+sort_button.pack(fill="x", pady=5)
+clear_button = tk.Button(controls_frame, text="Clear All", command=clear_all)
+clear_button.pack(fill="x", pady=5)
 
-# Result Label
-result_label = tk.Label(root, text="")
-result_label.pack(pady=10)
-
-# Copy Button
-copy_button = tk.Button(root, text="Copy to Clipboard", command=copy_to_clipboard)
-copy_button.pack(pady=10)
+# Output Text Area
+output_frame = tk.Frame(root, padx=10, pady=10)
+output_frame.grid(row=0, column=2, sticky="nsew")
+tk.Label(output_frame, text="Sorted Output:", anchor="w").pack(fill="x")
+output_text_box = tk.Text(output_frame, height=20, width=40)
+output_text_box.pack(fill="both", expand=True)
 
 root.mainloop()
