@@ -106,8 +106,9 @@ def shell_sort(numbers):
 def swap_sort(numbers):
     n = len(numbers)
     for i in range(n):
-        while numbers[i] != i + 1:
-            numbers[numbers[i] - 1], numbers[i] = numbers[i], numbers[numbers[i] - 1]
+        while 1 <= numbers[i] <= n and numbers[numbers[i] - 1] != numbers[i]:
+            correct_index = numbers[i] - 1
+            numbers[correct_index], numbers[i] = numbers[i], numbers[correct_index]
     return numbers
 
 def counting_sort(numbers, exp):
