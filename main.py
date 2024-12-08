@@ -171,18 +171,22 @@ def swap_sort(numbers):
     return numbers, steps
 
 def shell_sort(numbers):
-    steps = []
+    steps = []  # To store the steps of the sorting process
     n = len(numbers)
     gap = n // 2
+
     while gap > 0:
         for i in range(gap, n):
-            temp = numbers[i]
+            current_value = numbers[i]
             j = i
-            while j >= gap and numbers[j - gap] > temp:
+            while j >= gap and numbers[j - gap] > current_value:
                 numbers[j] = numbers[j - gap]
                 j -= gap
-            numbers[j] = temp
+                steps.append(f"Swap: {numbers}")  # Track each step
+            numbers[j] = current_value
         gap //= 2
+
+    steps.append(f"Final Sorted List: {numbers}")
     return numbers, steps
 
 # Main Sorting Function
