@@ -202,16 +202,32 @@ def sort_numbers():
             result, steps = selection_sort(numbers)
         elif sort_method == "Insertion Sort":
             result, steps = insertion_sort(numbers)
+        elif sort_method == "Merge Sort":
+            result, steps = merge_sort(numbers)
+        elif sort_method == "Quick Sort":
+            result, steps = quick_sort(numbers)
+        elif sort_method == "Heap Sort":
+            result, steps = heap_sort(numbers)
+        elif sort_method == "Radix Sort":
+            result, steps = radix_sort(numbers)
+        elif sort_method == "Inverse Sort":
+            result = sorted(numbers, reverse=True)
+            steps = [f"Sorting in descending order: {result}"]
         else:
             raise ValueError("Invalid sorting method selected.")
 
+        # Display the sorted result
         output_text_box.delete("1.0", tk.END)
         output_text_box.insert(tk.END, ", ".join(map(str, result)))
 
+        # Display the steps
         explanation_text_box.delete("1.0", tk.END)
         explanation_text_box.insert(tk.END, "\n".join(steps))
+
+    except ValueError as ve:
+        messagebox.showerror("Error", f"Invalid input or sorting method: {ve}")
     except Exception as e:
-        messagebox.showerror("Error", f"An error occurred: {e}")
+        messagebox.showerror("Error", f"An unexpected error occurred: {e}")
 
 # Clear All Function
 def clear_all():
