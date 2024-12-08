@@ -2,24 +2,176 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 
-# Sorting Algorithms
+# Sorting Algorithms with Steps
 def bubble_sort(numbers):
+    steps = []
     n = len(numbers)
     for i in range(n):
-        for j in range(0, n-i-1):
-            if numbers[j] > numbers[j+1]:
-                numbers[j], numbers[j+1] = numbers[j+1], numbers[j]
-    return numbers
+        for j in range(0, n - i - 1):
+            steps.append(f"Comparing {numbers[j]} and {numbers[j + 1]}")
+            if numbers[j] > numbers[j + 1]:
+                numbers[j], numbers[j + 1] = numbers[j + 1], numbers[j]
+                steps.append(f"Swapped: {numbers}")
+    return numbers, steps
+
+def selection_sort(numbers):
+    steps = []
+    n = len(numbers)
+    for i in range(n):
+        min_idx = i
+        for j in range(i + 1, n):
+            steps.append(f"Comparing {numbers[j]} and {numbers[min_idx]}")
+            if numbers[j] < numbers[min_idx]:
+                min_idx = j
+        numbers[i], numbers[min_idx] = numbers[min_idx], numbers[i]
+        steps.append(f"Swapped {numbers[i]} with {numbers[min_idx]}: {numbers}")
+    return numbers, steps
+
+def insertion_sort(numbers):
+    steps = []
+    for i in range(1, len(numbers)):
+        key = numbers[i]
+        j = i - 1
+        steps.append(f"Insert {key} into sorted part")
+        while j >= 0 and key < numbers[j]:
+            numbers[j + 1] = numbers[j]
+            steps.append(f"Moved {numbers[j]} to position {j + 1}")
+            j -= 1
+        numbers[j + 1] = key
+        steps.append(f"Inserted {key} at position {j + 1}: {numbers}")
+    return numbers, steps
+
+def merge_sort(numbers):
+    steps = []
+
+    def merge_sort_recursive(arr):
+        if len(arr) > 1:
+            mid = len(arr) // 2
+            left = arr[:mid]
+            right = arr[mid:]
+
+            merge_sort_recursive(left)
+            merge_sort_recursive(right)
+
+            i = j = k = 0
+            while i < len(left) and j < len(right):
+                if left[i] < right[j]:
+                    arr[k] = left[i]
+                    steps.append(f"Added {left[i]} from left to position {k}")
+                    i += 1
+                else:
+                    arr[k] = right[j]
+                    steps.append(f"Added {right[j]} from right to position {k}")
+                    j += 1
+                k += 1
+            while i < len(left):
+                arr[k] = left[i]
+                steps.append(f"Added remaining {left[i]} to position {k}")
+                i += 1
+                k += 1
+            while j < len(right):
+                arr[k] = right[j]
+                steps.append(f"Added remaining {right[j]} to position {k}")
+                j += 1
+                k += 1
+
+    merge_sort_recursive(numbers)
+    return numbers, steps
+
+def quick_sort(numbers):
+    steps = []
+
+    def quick_sort_recursive(arr):
+        if len(arr) <= 1:
+            return arr
+        pivot = arr[len(arr) // 2]
+        steps.append(f"Pivot chosen: {pivot}")
+        left = [x for x in arr if x < pivot]
+        middle = [x for x in arr if x == pivot]
+        right = [x for x in arr if x > pivot]
+        steps.append(f"Partitioned to left: {left}, middle: {middle}, right: {right}")
+        return quick_sort_recursive(left) + middle + quick_sort_recursive(right)
+
+    sorted_numbers = quick_sort_recursive(numbers)
+    return sorted_numbers, steps
+
+def heap_sort(numbers):
+    steps = []
+
+    def heapify(arr, n, i):
+        largest = i
+        l = 2 * i + 1
+        r = 2 * i + 2
+
+        if l < n and arr[i] < arr[l]:
+            largest = l
+
+        if r < n and arr[largest] < arr[r]:
+            largest = r
+
+        if largest != i:
+            arr[i], arr[largest] = arr[largest], arr[i]
+            steps.append(f"Swapped {arr[i]} with {arr[largest]}: {arr}")
+            heapify(arr, n, largest)
+
+    n = len(numbers)
+    for i in range(n // 2 - 1, -1, -1):
+        heapify(numbers, n, i)
+    for i in range(n - 1, 0, -1):
+        numbers[i], numbers[0] = numbers[0], numbers[i]
+        steps.append(f"Swapped {numbers[i]} with {numbers[0]}: {numbers}")
+        heapify(numbers, i, 0)
+
+    return numbers, steps
+
+def radix_sort(numbers):
+    steps = []
+
+    def counting_sort(arr, exp):
+        n = len(arr)
+        output = [0] * n
+        count = [0] * 10
+
+        for i in arr:
+            index = (i // exp) % 10
+            count[index] += 1
+
+        for i in range(1, 10):
+            count[i] += count[i - 1]
+
+        i = n - 1
+        while i >= 0:
+            index = (arr[i] // exp) % 10
+            output[count[index] - 1] = arr[i]
+            count[index] -= 1
+            i -= 1
+
+        for i in range(n):
+            arr[i] = output[i]
+
+    max_num = max(numbers)
+    exp = 1
+    while max_num // exp > 0:
+        steps.append(f"Sorting by place value {exp}")
+        counting_sort(numbers, exp)
+        steps.append(f"Array after sorting by {exp}: {numbers}")
+        exp *= 10
+
+    return numbers, steps
 
 def swap_sort(numbers):
+    steps = []
     n = len(numbers)
     for i in range(n):
         while 1 <= numbers[i] <= n and numbers[numbers[i] - 1] != numbers[i]:
             correct_index = numbers[i] - 1
+            steps.append(f"Swapping {numbers[i]} with {numbers[correct_index]}")
             numbers[correct_index], numbers[i] = numbers[i], numbers[correct_index]
-    return numbers
+            steps.append(f"Array after swap: {numbers}")
+    return numbers, steps
 
 def shell_sort(numbers):
+    steps = []
     n = len(numbers)
     gap = n // 2
     while gap > 0:
@@ -31,96 +183,7 @@ def shell_sort(numbers):
                 j -= gap
             numbers[j] = temp
         gap //= 2
-    return numbers
-
-def selection_sort(numbers):
-    n = len(numbers)
-    for i in range(n):
-        min_idx = i
-        for j in range(i+1, n):
-            if numbers[j] < numbers[min_idx]:
-                min_idx = j
-        numbers[i], numbers[min_idx] = numbers[min_idx], numbers[i]
-    return numbers
-
-def insertion_sort(numbers):
-    for i in range(1, len(numbers)):
-        key = numbers[i]
-        j = i - 1
-        while j >= 0 and key < numbers[j]:
-            numbers[j + 1] = numbers[j]
-            j -= 1
-        numbers[j + 1] = key
-    return numbers
-
-def merge_sort(numbers):
-    if len(numbers) > 1:
-        mid = len(numbers) // 2
-        L = numbers[:mid]
-        R = numbers[mid:]
-
-        merge_sort(L)
-        merge_sort(R)
-
-        i = j = k = 0
-
-        while i < len(L) and j < len(R):
-            if L[i] < R[j]:
-                numbers[k] = L[i]
-                i += 1
-            else:
-                numbers[k] = R[j]
-                j += 1
-            k += 1
-
-        while i < len(L):
-            numbers[k] = L[i]
-            i += 1
-            k += 1
-
-        while j < len(R):
-            numbers[k] = R[j]
-            j += 1
-            k += 1
-    return numbers
-
-def quick_sort(numbers):
-    if len(numbers) <= 1:
-        return numbers
-    pivot = numbers[len(numbers) // 2]
-    left = [x for x in numbers if x < pivot]
-    middle = [x for x in numbers if x == pivot]
-    right = [x for x in numbers if x > pivot]
-    return quick_sort(left) + middle + quick_sort(right)
-
-def radix_sort(numbers):
-    max_val = max(numbers)
-    exp = 1
-    while max_val // exp > 0:
-        counting_sort(numbers, exp)
-        exp *= 10
-    return numbers
-
-def counting_sort(numbers, exp):
-    n = len(numbers)
-    output = [0] * n
-    count = [0] * 10
-    for i in range(n):
-        index = numbers[i] // exp
-        count[index % 10] += 1
-    for i in range(1, 10):
-        count[i] += count[i - 1]
-    i = n - 1
-    while i >= 0:
-        index = numbers[i] // exp
-        output[count[index % 10] - 1] = numbers[i]
-        count[index % 10] -= 1
-        i -= 1
-    for i in range(n):
-        numbers[i] = output[i]
-
-def inverse_sort(numbers):
-    return sorted(numbers, reverse=True)
+    return numbers, steps
 
 # Main Sorting Function
 def sort_numbers():
@@ -130,28 +193,23 @@ def sort_numbers():
         sort_method = sort_method_combo.get()
 
         if sort_method == "Bubble Sort":
-            result = bubble_sort(numbers)
+            result, steps = bubble_sort(numbers)
         elif sort_method == "Swap Sort":
-            result = swap_sort(numbers)
+            result, steps = swap_sort(numbers)
         elif sort_method == "Shell Sort":
-            result = shell_sort(numbers)
+            result, steps = shell_sort(numbers)
         elif sort_method == "Selection Sort":
-            result = selection_sort(numbers)
+            result, steps = selection_sort(numbers)
         elif sort_method == "Insertion Sort":
-            result = insertion_sort(numbers)
-        elif sort_method == "Merge Sort":
-            result = merge_sort(numbers)
-        elif sort_method == "Quick Sort":
-            result = quick_sort(numbers)
-        elif sort_method == "Radix Sort":
-            result = radix_sort(numbers)
-        elif sort_method == "Inverse Sort":
-            result = inverse_sort(numbers)
+            result, steps = insertion_sort(numbers)
         else:
             raise ValueError("Invalid sorting method selected.")
 
         output_text_box.delete("1.0", tk.END)
         output_text_box.insert(tk.END, ", ".join(map(str, result)))
+
+        explanation_text_box.delete("1.0", tk.END)
+        explanation_text_box.insert(tk.END, "\n".join(steps))
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred: {e}")
 
@@ -159,10 +217,11 @@ def sort_numbers():
 def clear_all():
     input_text_box.delete("1.0", tk.END)
     output_text_box.delete("1.0", tk.END)
+    explanation_text_box.delete("1.0", tk.END)
 
 # Create Tkinter Window
 root = tk.Tk()
-root.title("Sorting Program")
+root.title("Sorting Program with Explanations")
 
 # Layout Configuration
 root.rowconfigure(0, weight=1)
@@ -179,14 +238,20 @@ input_text_box.pack(fill="both", expand=True)
 controls_frame = tk.Frame(root, padx=10, pady=10)
 controls_frame.grid(row=0, column=1, sticky="nsew")
 sort_method_combo = ttk.Combobox(controls_frame, state="readonly", values=[
-    "Bubble Sort", "Swap Sort", "Shell Sort", "Selection Sort", 
-    "Insertion Sort", "Merge Sort", "Quick Sort", "Radix Sort", "Inverse Sort"])
+    "Bubble Sort", "Swap Sort", "Shell Sort", "Selection Sort", "Insertion Sort"])
 sort_method_combo.set("Bubble Sort")
 sort_method_combo.pack(fill="x", pady=5)
 sort_button = tk.Button(controls_frame, text="Sort", command=sort_numbers)
 sort_button.pack(fill="x", pady=5)
 clear_button = tk.Button(controls_frame, text="Clear All", command=clear_all)
 clear_button.pack(fill="x", pady=5)
+
+# Explanation Box
+explanation_frame = tk.Frame(controls_frame, padx=10, pady=10)
+explanation_frame.pack(fill="both", expand=True)
+tk.Label(explanation_frame, text="Explanation of Steps:", anchor="w").pack(fill="x")
+explanation_text_box = tk.Text(explanation_frame, height=10, wrap="word")
+explanation_text_box.pack(fill="both", expand=True)
 
 # Output Text Area
 output_frame = tk.Frame(root, padx=10, pady=10)
