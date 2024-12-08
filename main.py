@@ -171,13 +171,13 @@ def swap_sort(numbers):
     return numbers, steps
 
 def shell_sort(numbers):
-    steps = []  # To store the steps of the sorting process
+    steps = []  
     n = len(numbers)
     gap = n // 2
-    steps.append(f"Starting list: {numbers}")  # Initial list
+    steps.append(f"Starting list: {numbers}")  
 
     while gap > 0:
-        steps.append(f"Gap: {gap}")  # Current gap value
+        steps.append(f"Gap: {gap}")  
         for i in range(gap, n):
             current_value = numbers[i]
             j = i
@@ -188,7 +188,7 @@ def shell_sort(numbers):
                 j -= gap
             numbers[j] = current_value
             steps.append(f"Inserted {current_value} at index {j} -> {numbers}")
-        gap //= 2  # Reduce gap
+        gap //= 2  
 
     steps.append(f"Final Sorted List: {numbers}")
     return numbers, steps
@@ -243,11 +243,9 @@ def clear_all():
     output_text_box.delete("1.0", tk.END)
     explanation_text_box.delete("1.0", tk.END)
 
-# Create Tkinter Window
 root = tk.Tk()
 root.title("Sorting Program with Explanations")
-
-# Layout Configuration
+root.geometry("1000x500") 
 root.rowconfigure(0, weight=1)
 root.columnconfigure([0, 1, 2], weight=1, uniform="column")
 
