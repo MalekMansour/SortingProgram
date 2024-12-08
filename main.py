@@ -113,14 +113,25 @@ def sort_numbers():
             messagebox.showerror("Error", "Invalid algorithm selected.")
             return
 
-        result_label.config(text="Sorted Numbers: " + ', '.join(map(str, result)))
+        result_str = ', '.join(map(str, result))
+        result_label.config(text="Sorted Numbers: " + result_str)
+        result_label.result = result_str
     except ValueError:
         messagebox.showerror("Error", "Please enter valid integers separated by commas.")
+
+def copy_to_clipboard():
+    if hasattr(result_label, 'result'):
+        root.clipboard_clear()
+        root.clipboard_append(result_label.result)
+        root.update()
+        messagebox.showinfo("Copied", "Sorted numbers copied to clipboard!")
+    else:
+        messagebox.showwarning("Warning", "No sorted result to copy.")
 
 # GUI Setup
 root = tk.Tk()
 root.title("Sorting Algorithm Visualizer")
-root.geometry("500x300")
+root.geometry("500x350")
 
 # Input Entry
 tk.Label(root, text="Enter numbers (comma-separated):").pack(pady=5)
@@ -141,5 +152,9 @@ sort_button.pack(pady=10)
 # Result Label
 result_label = tk.Label(root, text="")
 result_label.pack(pady=10)
+
+# Copy Button
+copy_button = tk.Button(root, text="Copy to Clipboard", command=copy_to_clipboard)
+copy_button.pack(pady=10)
 
 root.mainloop()
