@@ -274,7 +274,7 @@ def clear_all():
     input_text_box.delete("1.0", tk.END)
     output_text_box.delete("1.0", tk.END)
     explanation_text_box.delete("1.0", tk.END)
-    sort_method_combo.set("Bubble Sort")  # Reset to default sort method
+    sort_method_combo.set("Bubble Sort") 
 
 # Explanation Box
 explanation_frame = tk.Frame(controls_frame, padx=10, pady=10)
