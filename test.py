@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 
+# Sorting Algorithms
 def selection_sort(numbers):
     for i in range(len(numbers)):
         min_index = i
@@ -89,6 +90,57 @@ def heap_sort(numbers):
         heapify(numbers, i, 0)
     return numbers
 
+def shell_sort(numbers):
+    gap = len(numbers) // 2
+    while gap > 0:
+        for i in range(gap, len(numbers)):
+            temp = numbers[i]
+            j = i
+            while j >= gap and numbers[j - gap] > temp:
+                numbers[j] = numbers[j - gap]
+                j -= gap
+            numbers[j] = temp
+        gap //= 2
+    return numbers
+
+def swap_sort(numbers):
+    n = len(numbers)
+    for i in range(n):
+        while numbers[i] != i + 1:
+            numbers[numbers[i] - 1], numbers[i] = numbers[i], numbers[numbers[i] - 1]
+    return numbers
+
+def counting_sort(numbers, exp):
+    n = len(numbers)
+    output = [0] * n
+    count = [0] * 10
+
+    for i in numbers:
+        index = i // exp
+        count[index % 10] += 1
+
+    for i in range(1, 10):
+        count[i] += count[i - 1]
+
+    i = n - 1
+    while i >= 0:
+        index = numbers[i] // exp
+        output[count[index % 10] - 1] = numbers[i]
+        count[index % 10] -= 1
+        i -= 1
+
+    for i in range(n):
+        numbers[i] = output[i]
+
+def radix_sort(numbers):
+    max_val = max(numbers)
+    exp = 1
+    while max_val // exp > 0:
+        counting_sort(numbers, exp)
+        exp *= 10
+    return numbers
+
+# Main Sorting Function
 def sort_numbers():
     try:
         numbers = list(map(int, entry.get().split(',')))
@@ -109,18 +161,37 @@ def sort_numbers():
             result = quick_sort(numbers)
         elif algorithm == "Heap Sort":
             result = heap_sort(numbers)
+        elif algorithm == "Shell Sort":
+            result = shell_sort(numbers)
+        elif algorithm == "Swap Sort":
+            result = swap_sort(numbers)
+        elif algorithm == "Radix Sort":
+            result = radix_sort(numbers)
+        elif algorithm == "Inverse Sort":
+            result = selection_sort(numbers)[::-1]
         else:
             messagebox.showerror("Error", "Invalid algorithm selected.")
             return
 
-        result_label.config(text="Sorted Numbers: " + ', '.join(map(str, result)))
+        result_str = ', '.join(map(str, result))
+        result_label.config(text="Sorted Numbers: " + result_str)
+        result_label.result = result_str
     except ValueError:
         messagebox.showerror("Error", "Please enter valid integers separated by commas.")
+
+def copy_to_clipboard():
+    if hasattr(result_label, 'result'):
+        root.clipboard_clear()
+        root.clipboard_append(result_label.result)
+        root.update()
+        messagebox.showinfo("Copied", "Sorted numbers copied to clipboard!")
+    else:
+        messagebox.showwarning("Warning", "No sorted result to copy.")
 
 # GUI Setup
 root = tk.Tk()
 root.title("Sorting Algorithm Visualizer")
-root.geometry("500x300")
+root.geometry("500x400")
 
 # Input Entry
 tk.Label(root, text="Enter numbers (comma-separated):").pack(pady=5)
@@ -130,7 +201,8 @@ entry.pack(pady=5)
 # Algorithm Selection
 tk.Label(root, text="Select a sorting algorithm:").pack(pady=5)
 algo_combobox = ttk.Combobox(root, values=[
-    "Selection Sort", "Insertion Sort", "Bubble Sort", "Merge Sort", "Quick Sort", "Heap Sort"
+    "Selection Sort", "Insertion Sort", "Bubble Sort", "Merge Sort", "Quick Sort",
+    "Heap Sort", "Shell Sort", "Swap Sort", "Radix Sort", "Inverse Sort"
 ], state="readonly")
 algo_combobox.pack(pady=5)
 
@@ -141,5 +213,9 @@ sort_button.pack(pady=10)
 # Result Label
 result_label = tk.Label(root, text="")
 result_label.pack(pady=10)
+
+# Copy Button
+copy_button = tk.Button(root, text="Copy to Clipboard", command=copy_to_clipboard)
+copy_button.pack(pady=10)
 
 root.mainloop()
