@@ -3,3 +3,5 @@
 
 ## Methods
 - Bubble Sort
+- Insertion Sort
+- 
