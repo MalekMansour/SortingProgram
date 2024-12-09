@@ -6,3 +6,4 @@
 - Insertion Sort
 - Selection Sort
 - Quick Sort
+- Merge SortX
