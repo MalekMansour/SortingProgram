@@ -8,3 +8,4 @@
 - Quick Sort
 - Merge Sort
 - Heap Sort
+- Swap Sort
