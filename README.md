@@ -9,3 +9,6 @@
 - Merge Sort
 - Heap Sort
 - Swap Sort
+- Radix Sort
+- Shell Sort
+- Inverse Sort
