@@ -17,13 +17,17 @@ explanation of each step in the sorting process.
 
 ## Sorting Methods
 
-- Bubble Sort
-- Insertion Sort
-- Selection Sort
-- Quick Sort
-- Merge Sort
-- Heap Sort
-- Swap Sort
-- Radix Sort
-- Shell Sort
-- Inverse Sort
+The program includes the following sorting algorithms:
+
+- **Bubble Sort**: A simple comparison-based algorithm that repeatedly steps through the list.
+- **Insertion Sort**: Builds the sorted list one item at a time.
+- **Selection Sort**: Divides the list into a sorted and an unsorted region, expanding the sorted region one element at a time.
+- **Quick Sort**: A divide-and-conquer algorithm that uses partitioning to recursively sort the list.
+- **Merge Sort**: Recursively divides the list into halves, sorts them, and merges them back.
+- **Heap Sort**: Converts the list into a heap structure to efficiently retrieve the largest/smallest element.
+- **Swap Sort**: Focuses on swapping misplaced elements to sort the list.
+- **Radix Sort**: Processes numbers digit by digit, based on their significant positions.
+- **Shell Sort**: A generalized version of insertion sort that allows exchanges of distant elements.
+- **Inverse Sort**: Sorts the list in descending order (reverse sort).
+
+---
