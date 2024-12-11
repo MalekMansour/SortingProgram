@@ -7,6 +7,14 @@ explanation of each step in the sorting process.
 
 --- 
 
+## Features
+
+- **Graphical User Interface (GUI)**: Input numbers, select sorting methods, and view results seamlessly.
+- **Step-by-Step Explanation**: Understand how the sorting algorithm processes your input through detailed steps displayed in real-time.
+- **Clear Functionality**: Easily reset the input, output, and explanation sections for a fresh start.
+
+---
+
 ## Sorting Methods
 
 - Bubble Sort
