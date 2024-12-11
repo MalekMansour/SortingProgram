@@ -31,3 +31,11 @@ The program includes the following sorting algorithms:
 - **Inverse Sort**: Sorts the list in descending order (reverse sort).
 
 ---
+
+## Installation
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/MalekMansour/SortingProgram
+   cd SortingProgram
+   python sorting_program.py
