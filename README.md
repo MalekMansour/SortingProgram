@@ -1,4 +1,4 @@
-# Sorting Program
+# Sorting Program by Malek Mansour
 
 A Python program that allows users to sort numbers using various sorting algorithms. 
 The program features a user-friendly graphical interface where you can input numbers, 
