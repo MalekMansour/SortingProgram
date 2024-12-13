@@ -34,9 +34,8 @@ The program includes the following sorting algorithms:
 
 ## Screenshots
 
-[Screenshot!](screenshots/screenshot1.png)
-[Screenshot!](screenshots/screenshot2.png)
-[Screenshot!](screenshots/screenshot3.png)
+![Screenshot](screenshots/screenshot1.png)
+
 
 ---
 
