@@ -1,5 +1,5 @@
 # Author: Malek Mansour
-# 
+# Copyright (c) 2024 Malek Mansour
 
 import tkinter as tk
 from tkinter import ttk
