@@ -32,6 +32,11 @@ The program includes the following sorting algorithms:
 
 ---
 
+## Screenshots
+
+
+---
+
 ## Installation
 
 1. **Clone the repository**:
